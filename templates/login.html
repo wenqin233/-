@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - AI个性化学习伴侣</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-robot"></i> AI学习伴侣
+            </a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/dashboard" class="nav-link">仪表板</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/lesson" class="nav-link">课程</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/exercise" class="nav-link">练习</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/docs" class="nav-link">API文档</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/login" class="nav-link active">登录</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/register" class="nav-link">注册</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1><i class="fas fa-sign-in-alt"></i> 用户登录</h1>
+            <p>登录您的账户以继续学习</p>
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            
+            <button type="submit" class="btn">登录</button>
+        </form>
+        
+        <div class="auth-footer">
+            <p>还没有账户？</p>
+            <a href="/register">立即注册</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 获取表单数据
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            // 简单验证
+            if (!username || !password) {
+                alert("请填写所有字段");
+                return;
+            }
+            
+            // 发送登录请求到后端API
+            fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            })
+            .then(response => {
+                // 检查响应类型
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('服务器返回了非JSON响应');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // 登录成功，将用户ID和用户名存储在localStorage中
+                    localStorage.setItem('user_id', data.data.user_id);
+                    localStorage.setItem('username', data.data.username);
+                    localStorage.setItem('is_logged_in', 'true');
+                    
+                    alert("登录成功！");
+                    // 登录成功后跳转到仪表板页面
+                    window.location.href = '/dashboard';
+                } else {
+                    alert("登录失败: " + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("登录过程中发生错误: " + error.message);
+            });
+        });
+    </script>
+</body>
+</html>

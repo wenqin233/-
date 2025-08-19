@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI个性化学习伴侣</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <script>
+        // 检查用户是否已登录
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('is_logged_in');
+            if (isLoggedIn === 'true') {
+                // 已登录用户重定向到仪表板页面
+                // 注意：我们只在用户明确想要访问仪表板时才重定向
+                // 如果用户直接访问首页，我们允许他们查看首页内容
+                console.log('用户已登录，但仍在首页');
+            }
+        });
+    </script>
+    
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-robot"></i> AI学习伴侣
+            </a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/" class="nav-link active">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/dashboard" class="nav-link">仪表板</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/lesson" class="nav-link">课程</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/exercise" class="nav-link">练习</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/docs" class="nav-link">API文档</a>
+                </li>
+                <li class="nav-item" id="auth-links">
+                    <a href="/login" class="nav-link">登录</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/register" class="nav-link">注册</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <script>
+        // 根据登录状态更新导航栏
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('is_logged_in');
+            const authLinks = document.getElementById('auth-links');
+            
+            if (isLoggedIn === 'true') {
+                // 用户已登录，替换为注销链接
+                authLinks.innerHTML = '<a href="#" class="nav-link" onclick="logout()">注销</a>';
+                
+                // 查找并移除登录链接
+                const loginLink = document.querySelector('a[href="/login"]');
+                if (loginLink) {
+                    loginLink.parentElement.remove();
+                }
+                
+                // 查找并移除注册链接
+                const registerLink = document.querySelector('a[href="/register"]');
+                if (registerLink) {
+                    registerLink.parentElement.remove();
+                }
+            }
+        });
+        
+        // 登出功能
+        function logout() {
+            // 清除localStorage中的用户信息
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('username');
+            localStorage.removeItem('is_logged_in');
+            
+            // 重定向到首页
+            window.location.href = '/';
+        }
+    </script>
+    <!-- 头部 -->
+    <header class="header">
+        <div class="container">
+            <h1>AI个性化学习伴侣</h1>
+            <p>基于人工智能的个性化学习系统，动态评估知识水平并自适应生成学习内容</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- 特色功能 -->
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>智能评估</h3>
+                <p>通过交互式问答快速绘制学习者知识图谱，准确评估当前知识水平。</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>个性化内容</h3>
+                <p>根据学习进度自动调整讲解深度和案例难度，提供定制化学习体验。</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>多模态解释</h3>
+                <p>对同一概念提供文字、图解、代码示例等多种解释方式，加深理解。</p>
+            </div>
+        </section>
+
+        <!-- 行动召唤 -->
+        <section class="cta-section">
+            <h2>开始您的个性化学习之旅</h2>
+            <p>注册账户，立即体验AI驱动的个性化学习</p>
+            <a href="/register" class="btn">立即注册</a>
+            <a href="/login" class="btn btn-outline">登录账户</a>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 AI个性化学习伴侣. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

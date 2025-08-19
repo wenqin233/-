@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI个性化学习伴侣 - 仪表板</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-robot"></i> AI学习伴侣
+            </a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/dashboard" class="nav-link active">仪表板</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/lesson" class="nav-link">课程</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/exercise" class="nav-link">练习</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/docs" class="nav-link">API文档</a>
+                </li>
+                <li class="nav-item" id="auth-links">
+                    <a href="/login" class="nav-link">登录</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <script>
+        // 根据登录状态更新导航栏
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('is_logged_in');
+            const authLinks = document.getElementById('auth-links');
+            
+            if (isLoggedIn === 'true') {
+                // 用户已登录，替换为注销链接
+                authLinks.innerHTML = '<a href="#" class="nav-link" onclick="logout()">注销</a>';
+            } else {
+                // 用户未登录，重定向到登录页面
+                window.location.href = '/login';
+            }
+        });
+        
+        // 登出功能
+        function logout() {
+            // 清除localStorage中的用户信息
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('username');
+            localStorage.removeItem('is_logged_in');
+            
+            // 重定向到首页
+            window.location.href = '/';
+        }
+    </script>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>学习仪表板</h1>
+            <p>欢迎回来，<span id="username">用户</span>！</p>
+        </div>
+
+        <!-- 课程选择 -->
+        <div class="card course-selector">
+            <div class="card-header">
+                <i class="fas fa-book"></i>
+                <h2>选择课程</h2>
+            </div>
+            <div class="course-grid" id="course-grid">
+                <!-- 课程将通过JavaScript动态加载 -->
+            </div>
+        </div>
+
+        <!-- 推荐主题 -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-lightbulb"></i>
+                <h2>推荐学习主题</h2>
+            </div>
+            <div class="topic-grid">
+                <div class="topic-card">
+                    <h3>Python基础</h3>
+                    <p>变量、数据类型、控制结构</p>
+                    <div class="topic-meta">
+                        <span><i class="fas fa-signal"></i> 初级</span>
+                        <span><i class="fas fa-clock"></i> 2小时</span>
+                    </div>
+                    <div class="text-center" style="margin-top: 1rem;">
+                        <a href="/lesson" class="btn">开始学习</a>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <h3>Web开发基础</h3>
+                    <p>HTML基础、CSS样式、JavaScript交互</p>
+                    <div class="topic-meta">
+                        <span><i class="fas fa-signal"></i> 初级</span>
+                        <span><i class="fas fa-clock"></i> 3小时</span>
+                    </div>
+                    <div class="text-center" style="margin-top: 1rem;">
+                        <a href="/lesson" class="btn">开始学习</a>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <h3>数据结构与算法</h3>
+                    <p>数组、链表、树、图</p>
+                    <div class="topic-meta">
+                        <span><i class="fas fa-signal"></i> 中级</span>
+                        <span><i class="fas fa-clock"></i> 5小时</span>
+                    </div>
+                    <div class="text-center" style="margin-top: 1rem;">
+                        <a href="/lesson" class="btn btn-outline">了解更多</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最近学习历史 -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-history"></i>
+                <h2>最近学习历史</h2>
+            </div>
+            <div class="topic-grid">
+                <div class="topic-card">
+                    <h3>机器学习基础</h3>
+                    <p>监督学习、无监督学习、模型评估</p>
+                    <div class="topic-meta">
+                        <span><i class="fas fa-calendar"></i> 2天前</span>
+                        <span><i class="fas fa-check-circle" style="color: var(--success-color);"></i> 已完成</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <h3>Python函数</h3>
+                    <p>函数定义、参数传递、作用域</p>
+                    <div class="topic-meta">
+                        <span><i class="fas fa-calendar"></i> 5天前</span>
+                        <span><i class="fas fa-check-circle" style="color: var(--success-color);"></i> 已完成</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI交互式学习助手 -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-robot"></i>
+                <h2>AI交互式学习助手</h2>
+            </div>
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message bot-message">
+                        <div class="message-content">
+                            你好！我是你的AI学习助手。我可以帮助你解答编程相关的问题，或者和你聊聊学习内容。你想聊什么？
+                        </div>
+                        <div class="message-time">现在</div>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chat-input" placeholder="输入你的问题或想聊的话题..." />
+                    <button id="send-button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 更新用户名显示
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = localStorage.getItem('username');
+            if (username) {
+                document.getElementById('username').textContent = username;
+            }
+            
+            // 加载课程列表
+            loadCourses();
+            
+            // AI交互式学习助手功能
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-button');
+            
+            // 发送消息函数
+            function sendMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+                
+                // 添加用户消息到聊天记录
+                addMessageToChat(message, 'user');
+                chatInput.value = '';
+                
+                // 发送请求到后端API
+                fetch('/api/interactive-chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        context: {},
+                        topic: getCurrentTopic()
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // 添加AI响应到聊天记录
+                        addMessageToChat(data.data.response, 'bot');
+                    } else {
+                        addMessageToChat('抱歉，我无法回答你的问题。请稍后重试。', 'bot');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    addMessageToChat('抱歉，处理你的消息时出现了错误。', 'bot');
+                });
+            }
+            
+            // 获取当前选中的主题
+            function getCurrentTopic() {
+                // 这里可以实现获取当前选中课程的逻辑
+                return 'general';
+            }
+            
+            // 添加消息到聊天记录
+            function addMessageToChat(content, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}-message`;
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                contentDiv.textContent = content;
+                
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'message-time';
+                timeDiv.textContent = new Date().toLocaleTimeString();
+                
+                messageDiv.appendChild(contentDiv);
+                messageDiv.appendChild(timeDiv);
+                chatMessages.appendChild(messageDiv);
+                
+                // 滚动到底部
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // 事件监听器
+            sendButton.addEventListener('click', sendMessage);
+            
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // 加载课程列表
+            function loadCourses() {
+                fetch('/api/topics')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        renderCourses(data.data);
+                    }
+                })
+                .catch(error => {
+                    console.error('加载课程失败:', error);
+                });
+            }
+            
+            // 渲染课程列表
+            function renderCourses(courses) {
+                const courseGrid = document.getElementById('course-grid');
+                courseGrid.innerHTML = '';
+                
+                courses.forEach(course => {
+                    const courseCard = document.createElement('div');
+                    courseCard.className = 'course-card';
+                    courseCard.innerHTML = `
+                        <i class="fas fa-book-open"></i>
+                        <h4>${course.name}</h4>
+                        <p>${course.key_points.join('、')}</p>
+                    `;
+                    
+                    courseCard.addEventListener('click', function() {
+                        // 移除其他卡片的选中状态
+                        document.querySelectorAll('.course-card').forEach(card => {
+                            card.classList.remove('selected');
+                        });
+                        
+                        // 添加当前卡片的选中状态
+                        this.classList.add('selected');
+                        
+                        // 跳转到课程详情页
+                        window.location.href = `/lesson?topic=${course.id}`;
+                    });
+                    
+                    courseGrid.appendChild(courseCard);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

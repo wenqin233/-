@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课程详情 - AI个性化学习伴侣</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <script>
+        // 检查用户是否已登录
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('is_logged_in');
+            if (!isLoggedIn) {
+                // 未登录用户重定向到登录页面
+                window.location.href = '/login';
+            }
+        });
+    </script>
+    
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-robot"></i> AI学习伴侣
+            </a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/dashboard" class="nav-link">仪表板</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/lesson" class="nav-link active">课程</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/exercise" class="nav-link">练习</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/docs" class="nav-link">API文档</a>
+                </li>
+                <li class="nav-item" id="auth-links">
+                    <a href="/login" class="nav-link">登录</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <script>
+        // 根据登录状态更新导航栏
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('is_logged_in');
+            const authLinks = document.getElementById('auth-links');
+            
+            if (isLoggedIn === 'true') {
+                // 用户已登录，替换为注销链接
+                authLinks.innerHTML = '<a href="#" class="nav-link" onclick="logout()">注销</a>';
+            }
+        });
+        
+        // 登出功能
+        function logout() {
+            // 清除localStorage中的用户信息
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('username');
+            localStorage.removeItem('is_logged_in');
+            
+            // 重定向到首页
+            window.location.href = '/';
+        }
+    </script>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>课程学习</h1>
+            <p>选择一个课程开始学习</p>
+        </div>
+
+        <!-- 课程选择 -->
+        <div class="card course-selector" id="course-selector">
+            <div class="card-header">
+                <i class="fas fa-book"></i>
+                <h2>选择课程</h2>
+            </div>
+            <div class="course-grid" id="course-grid">
+                <!-- 课程将通过JavaScript动态加载 -->
+            </div>
+        </div>
+
+        <!-- 课程内容 -->
+        <div class="lesson-container" id="lesson-content" style="display: none;">
+            <div class="lesson-header">
+                <h1 class="lesson-title" id="lesson-title">Python基础：变量、数据类型与控制结构</h1>
+                <div class="lesson-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-signal"></i> <span id="lesson-difficulty">初级</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-clock"></i> <span id="lesson-duration">预计30分钟</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-user"></i> 适合初学者
+                    </div>
+                </div>
+                <p id="lesson-description">本课程将介绍Python编程的基础概念，包括变量的使用、常见的数据类型以及控制结构。</p>
+            </div>
+
+            <!-- 知识点流程图 -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-sitemap"></i>
+                    <h3>知识点流程图</h3>
+                </div>
+                <div class="knowledge-graph-container">
+                    <div id="knowledge-graph" class="knowledge-graph">
+                        <!-- 知识点流程图将通过JavaScript动态生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <div class="content-section">
+                    <h3>课程内容</h3>
+                    <div id="lesson-material">
+                        <!-- 课程材料将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+                
+                <div class="text-center" style="margin: 2rem 0;">
+                    <button class="btn" id="start-learning-btn">开始学习</button>
+                    <a href="/exercise" class="btn btn-outline" id="start-exercise-btn" style="display: none;">开始练习</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 学习界面 -->
+        <div class="lesson-container" id="learning-content" style="display: none;">
+            <div class="lesson-header">
+                <h1 class="lesson-title" id="learning-title">Python基础：变量、数据类型与控制结构</h1>
+                <div class="lesson-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-signal"></i> <span id="learning-difficulty">初级</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-clock"></i> <span id="learning-duration">预计30分钟</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-content">
+                <div id="learning-material">
+                    <!-- 学习材料将通过JavaScript动态加载 -->
+                </div>
+                
+                <div class="text-center" style="margin: 2rem 0;">
+                    <button class="btn" id="complete-learning-btn">完成学习</button>
+                    <a href="/exercise" class="btn btn-outline" id="exercise-btn" style="display: none;">开始练习</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI交互式学习助手 -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-robot"></i>
+                <h2>AI交互式学习助手</h2>
+            </div>
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message bot-message">
+                        <div class="message-content">
+                            你好！我是你的AI学习助手。你现在正在学习课程内容，有什么问题可以问我。
+                        </div>
+                        <div class="message-time">现在</div>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chat-input" placeholder="输入你的问题..." />
+                    <button id="send-button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // AI交互式学习助手功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取URL参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const topicId = urlParams.get('topic');
+            
+            // 如果有topic参数，直接加载课程内容
+            if (topicId) {
+                loadLessonContent(topicId);
+                document.getElementById('course-selector').style.display = 'none';
+            } else {
+                // 否则显示课程选择界面
+                loadCourses();
+            }
+            
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-button');
+            
+            // 发送消息函数
+            function sendMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+                
+                // 添加用户消息到聊天记录
+                addMessageToChat(message, 'user');
+                chatInput.value = '';
+                
+                // 发送请求到后端API
+                fetch('/api/interactive-chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        context: getCurrentContext(),
+                        topic: getCurrentTopic()
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // 添加AI响应到聊天记录
+                        addMessageToChat(data.data.response, 'bot');
+                    } else {
+                        addMessageToChat('抱歉，我无法回答你的问题。请稍后重试。', 'bot');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    addMessageToChat('抱歉，处理你的消息时出现了错误。', 'bot');
+                });
+            }
+            
+            // 获取当前上下文
+            function getCurrentContext() {
+                // 这里可以实现获取当前学习内容的逻辑
+                return {};
+            }
+            
+            // 获取当前主题
+            function getCurrentTopic() {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get('topic') || 'general';
+            }
+            
+            // 添加消息到聊天记录
+            function addMessageToChat(content, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}-message`;
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                contentDiv.textContent = content;
+                
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'message-time';
+                timeDiv.textContent = new Date().toLocaleTimeString();
+                
+                messageDiv.appendChild(contentDiv);
+                messageDiv.appendChild(timeDiv);
+                chatMessages.appendChild(messageDiv);
+                
+                // 滚动到底部
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // 事件监听器
+            sendButton.addEventListener('click', sendMessage);
+            
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // 加载课程列表
+            function loadCourses() {
+                fetch('/api/topics')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        renderCourses(data.data);
+                    }
+                })
+                .catch(error => {
+                    console.error('加载课程失败:', error);
+                });
+            }
+            
+            // 渲染课程列表
+            function renderCourses(courses) {
+                const courseGrid = document.getElementById('course-grid');
+                courseGrid.innerHTML = '';
+                
+                courses.forEach(course => {
+                    const courseCard = document.createElement('div');
+                    courseCard.className = 'course-card';
+                    courseCard.innerHTML = `
+                        <i class="fas fa-book-open"></i>
+                        <h4>${course.name}</h4>
+                        <p>${course.key_points.join('、')}</p>
+                    `;
+                    
+                    courseCard.addEventListener('click', function() {
+                        // 移除其他卡片的选中状态
+                        document.querySelectorAll('.course-card').forEach(card => {
+                            card.classList.remove('selected');
+                        });
+                        
+                        // 添加当前卡片的选中状态
+                        this.classList.add('selected');
+                        
+                        // 隐藏课程选择器，显示课程内容
+                        document.getElementById('course-selector').style.display = 'none';
+                        loadLessonContent(course.id);
+                        
+                        // 更新URL参数
+                        const url = new URL(window.location);
+                        url.searchParams.set('topic', course.id);
+                        window.history.pushState({}, '', url);
+                    });
+                    
+                    courseGrid.appendChild(courseCard);
+                });
+            }
+            
+            // 加载课程内容
+            function loadLessonContent(topicId) {
+                fetch('/api/generate-lesson', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        learning_goal: topicId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        displayLessonContent(data.data);
+                    }
+                })
+                .catch(error => {
+                    console.error('加载课程内容失败:', error);
+                });
+            }
+            
+            // 显示课程内容
+            function displayLessonContent(lessonData) {
+                document.getElementById('lesson-title').textContent = lessonData.title;
+                document.getElementById('lesson-difficulty').textContent = lessonData.difficulty || '初级';
+                document.getElementById('lesson-duration').textContent = lessonData.duration || '预计30分钟';
+                document.getElementById('lesson-description').textContent = lessonData.description || '';
+                
+                const materialContainer = document.getElementById('lesson-material');
+                materialContainer.innerHTML = '';
+                
+                if (lessonData.content) {
+                    lessonData.content.forEach(section => {
+                        const sectionDiv = document.createElement('div');
+                        sectionDiv.className = 'content-section';
+                        sectionDiv.innerHTML = `
+                            <h4>${section.heading}</h4>
+                            <p>${section.explanation}</p>
+                            ${section.example ? `<pre>${section.example}</pre>` : ''}
+                        `;
+                        materialContainer.appendChild(sectionDiv);
+                    });
+                }
+                
+                // 显示课程内容区域
+                document.getElementById('lesson-content').style.display = 'block';
+                
+                // 添加完成课程按钮事件
+                document.getElementById('complete-lesson-btn').addEventListener('click', function() {
+                    // 这里可以添加完成课程的逻辑
+                    alert('课程已完成！你可以继续学习其他课程或进行练习。');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API文档 - AI个性化学习伴侣</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 页面专属样式 */
+        .docs-content {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 2rem;
+        }
+
+        .docs-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: var(--border-radius);
+        }
+
+        .docs-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 5rem;
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: var(--dark-color);
+            display: block;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .sidebar a:hover {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+
+        .sidebar a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+        }
+
+        .endpoint {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .endpoint:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .method {
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--border-radius);
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-right: 1rem;
+        }
+
+        .method.get {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .method.post {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .endpoint-path {
+            font-family: monospace;
+            font-size: 1.1rem;
+        }
+
+        .endpoint-title {
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+
+        .endpoint-description {
+            margin-bottom: 1rem;
+            color: var(--gray-color);
+        }
+
+        .code-block {
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+
+        @media (max-width: 768px) {
+            .docs-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: relative;
+                top: 0;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-robot"></i> AI学习伴侣
+            </a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/dashboard" class="nav-link">仪表板</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/lesson" class="nav-link">课程</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/exercise" class="nav-link">练习</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/docs" class="nav-link active">API文档</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/login" class="nav-link">登录</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/register" class="nav-link">注册</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="docs-container">
+        <div class="docs-header">
+            <h1><i class="fas fa-book"></i> API文档</h1>
+            <p>AI个性化学习伴侣API接口使用说明</p>
+        </div>
+
+        <div class="docs-content">
+            <div class="sidebar">
+                <h3>目录</h3>
+                <ul>
+                    <li><a href="#authentication" class="active">用户认证</a></li>
+                    <li><a href="#knowledge">知识评估</a></li>
+                    <li><a href="#lessons">课程生成</a></li>
+                    <li><a href="#exercises">练习反馈</a></li>
+                    <li><a href="#progress">进度跟踪</a></li>
+                </ul>
+            </div>
+
+            <div class="main-content">
+                <h2 class="endpoint-title">API接口文档</h2>
+                <p>本文档详细说明了AI个性化学习伴侣提供的所有API接口，帮助开发者快速集成和使用系统功能。</p>
+
+                <div class="endpoint" id="authentication">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/api/register</span>
+                    </div>
+                    <h3 class="endpoint-title">用户注册</h3>
+                    <p class="endpoint-description">创建新用户账户</p>
+                    <div class="code-block">
+                        curl -X POST http://localhost:5000/api/register \<br>
+                        &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+                        &nbsp;&nbsp;-d '{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"username": "testuser",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"email": "test@example.com",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"password": "SecurePassword123"<br>
+                        &nbsp;&nbsp;}'
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/api/login</span>
+                    </div>
+                    <h3 class="endpoint-title">用户登录</h3>
+                    <p class="endpoint-description">用户登录获取访问令牌</p>
+                    <div class="code-block">
+                        curl -X POST http://localhost:5000/api/login \<br>
+                        &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+                        &nbsp;&nbsp;-d '{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"username": "testuser",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"password": "SecurePassword123"<br>
+                        &nbsp;&nbsp;}'
+                    </div>
+                </div>
+
+                <div class="endpoint" id="knowledge">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/api/analyze-knowledge</span>
+                    </div>
+                    <h3 class="endpoint-title">分析知识水平</h3>
+                    <p class="endpoint-description">根据用户答题情况分析知识水平</p>
+                    <div class="code-block">
+                        curl -X POST http://localhost:5000/api/analyze-knowledge \<br>
+                        &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+                        &nbsp;&nbsp;-H "Authorization: Bearer YOUR_JWT_TOKEN" \<br>
+                        &nbsp;&nbsp;-d '{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"answers": [<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"question_id": 1,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"answer": "用户答案"<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;]<br>
+                        &nbsp;&nbsp;}'
+                    </div>
+                </div>
+
+                <div class="endpoint" id="lessons">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/api/generate-lesson</span>
+                    </div>
+                    <h3 class="endpoint-title">生成个性化课程</h3>
+                    <p class="endpoint-description">根据学习目标生成个性化课程内容</p>
+                    <div class="code-block">
+                        curl -X POST http://localhost:5000/api/generate-lesson \<br>
+                        &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+                        &nbsp;&nbsp;-H "Authorization: Bearer YOUR_JWT_TOKEN" \<br>
+                        &nbsp;&nbsp;-d '{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"learning_goal": "我想学习Python基础"<br>
+                        &nbsp;&nbsp;}'
+                    </div>
+                </div>
+
+                <div class="endpoint" id="exercises">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/api/exercise-feedback</span>
+                    </div>
+                    <h3 class="endpoint-title">处理练习反馈</h3>
+                    <p class="endpoint-description">提交练习答案并获取反馈</p>
+                    <div class="code-block">
+                        curl -X POST http://localhost:5000/api/exercise-feedback \<br>
+                        &nbsp;&nbsp;-H "Content-Type: application/json" \<br>
+                        &nbsp;&nbsp;-H "Authorization: Bearer YOUR_JWT_TOKEN" \<br>
+                        &nbsp;&nbsp;-d '{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"exercise_data": {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"exercise_id": "练习ID",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"type": "multiple_choice",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"topic": "python_basics",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"user_answer": "用户答案",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"correct_answer": "正确答案"<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;}'
+                    </div>
+                </div>
+
+                <div class="endpoint" id="progress">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/api/progress-summary</span>
+                    </div>
+                    <h3 class="endpoint-title">获取学习进度摘要</h3>
+                    <p class="endpoint-description">获取用户学习进度的总体摘要</p>
+                    <div class="code-block">
+                        curl -X GET http://localhost:5000/api/progress-summary \<br>
+                        &nbsp;&nbsp;-H "Authorization: Bearer YOUR_JWT_TOKEN"
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 简单的锚点链接高亮功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('.sidebar a');
+            const sections = document.querySelectorAll('.endpoint');
+            
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    links.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

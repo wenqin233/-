@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>练习反馈 - AI个性化学习伴侣</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-robot"></i> AI学习伴侣
+            </a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/dashboard" class="nav-link">仪表板</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/lesson" class="nav-link">课程</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/exercise" class="nav-link active">练习</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/docs" class="nav-link">API文档</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/login" class="nav-link">登录</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/register" class="nav-link">注册</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="exercise-container">
+        <div class="exercise-header">
+            <h1 class="exercise-title">Python基础练习</h1>
+            <div class="exercise-meta">
+                <div class="meta-item">
+                    <i class="fas fa-signal"></i> 初级
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-tasks"></i> 3道题目
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-user"></i> 适合初学者
+                </div>
+            </div>
+            <p>完成以下练习题来检验您对Python基础知识的掌握情况。</p>
+        </div>
+
+        <div class="exercise-content">
+            <div class="content-section">
+                <h3><i class="fas fa-edit"></i> 练习题目</h3>
+                
+                <div class="question">
+                    <div class="question-header">
+                        <span class="question-number">题目 1</span>
+                        <span class="question-type">选择题</span>
+                    </div>
+                    <p>以下哪个选项是Python中的合法变量名？</p>
+                    <ul class="options">
+                        <li class="option" data-question="1" data-option="A">2nd_variable</li>
+                        <li class="option" data-question="1" data-option="B">myVariable</li>
+                        <li class="option" data-question="1" data-option="C">class</li>
+                        <li class="option" data-question="1" data-option="D">123abc</li>
+                    </ul>
+                    <div class="feedback" id="feedback-1" style="display: none;">
+                        <p><i class="fas fa-check-circle" style="color: var(--success-color);"></i> <strong>正确！</strong> myVariable是合法的变量名。变量名不能以数字开头，也不能使用关键字。</p>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-header">
+                        <span class="question-number">题目 2</span>
+                        <span class="question-type">编程题</span>
+                    </div>
+                    <p>编写一个Python程序，定义一个变量age并赋值为20，然后打印该变量。</p>
+                    <textarea class="form-control" rows="5" placeholder="在这里编写您的代码..."></textarea>
+                    <button class="btn" style="margin-top: 1rem;">提交代码</button>
+                    <div class="feedback" id="feedback-2" style="display: none;">
+                        <p><i class="fas fa-info-circle" style="color: var(--primary-color);"></i> <strong>参考答案：</strong></p>
+                        <pre><code>age = 20
+print(age)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-header">
+                        <span class="question-number">题目 3</span>
+                        <span class="question-type">选择题</span>
+                    </div>
+                    <p>执行以下代码后，输出的结果是什么？</p>
+                    <pre><code>x = 5
+if x > 3:
+    print('A')
+else:
+    print('B')</code></pre>
+                    <ul class="options">
+                        <li class="option" data-question="3" data-option="A">A</li>
+                        <li class="option" data-question="3" data-option="B">B</li>
+                        <li class="option" data-question="3" data-option="C">3</li>
+                        <li class="option" data-question="3" data-option="D">5</li>
+                    </ul>
+                    <div class="feedback" id="feedback-3" style="display: none;">
+                        <p><i class="fas fa-check-circle" style="color: var(--success-color);"></i> <strong>正确！</strong> 因为x的值是5，大于3，所以会执行if分支，输出'A'。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center" style="margin-bottom: 2rem;">
+            <a href="/lesson" class="btn">返回课程</a>
+            <a href="/dashboard" class="btn btn-outline">返回仪表板</a>
+        </div>
+    </div>
+
+    <script>
+        // 为选择题添加交互功能
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                // 移除同题其他选项的选中状态
+                const questionId = this.dataset.question;
+                document.querySelectorAll(`.option[data-question="${questionId}"]`).forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // 添加当前选项的选中状态
+                this.classList.add('selected');
+                
+                // 显示反馈（模拟）
+                const feedback = document.getElementById(`feedback-${questionId}`);
+                if (feedback) {
+                    feedback.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
