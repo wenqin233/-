@@ -92,6 +92,68 @@ project/
     └── api.md            # API文档
 ```
 
+## 环境配置
+
+1. 在`.env`文件中根据您的实际配置替换占位符值：
+* your-secret-key-here → 替换为实际的 Flask 密钥
+* your-dashscope-api-key-here → 替换为实际的阿里云百炼 API 密钥
+* mongodb://localhost:27017/ai_learning_companion → 根据实际 MongoDB 配置修改
+* your-jwt-secret-key-here → 替换为实际的 JWT 密钥
+* Redis 相关配置根据实际 Redis 服务器信息修改
+  
+1. 配置必要的环境变量：
+   - `DASHSCOPE_API_KEY`: 阿里云百炼API密钥
+   - `MONGO_URI`: MongoDB连接字符串
+   - `JWT_SECRET_KEY`: JWT密钥
+   - `REDIS_URL`: Redis连接字符串
+### 以下为实例
+```
+ # Flask配置
+FLASK_APP=app.py
+FLASK_ENV=development
+SECRET_KEY=your-secret-key-here
+
+# LLM API配置（如OpenAI或阿里云百炼）
+DASHSCOPE_API_KEY=你的APIkey
+# OPENAI_API_KEY=your-openai-api-key-here
+OPENAI_API_BASE=https://api.openai.com/v1
+
+# 数据库配置
+MONGO_URI=mongodb://localhost:27017/ai_learning_companion
+
+# JWT配置
+JWT_SECRET_KEY=your-jwt-secret-key-here
+
+# Redis配置（用于Celery）
+REDIS_URL=redis://localhost:6379/0
+
+# Celery配置
+CELERY_BROKER_URL=redis://localhost:6379/0
+CELERY_RESULT_BACKEND=redis://localhost:6379/0
+```
+## 安装与运行
+
+### 本地开发环境
+
+1. 安装依赖：
+   ```bash
+   pip install -r requirements.txt
+   ```
+* PS:若安装依赖报错请尝试以下方法
+* 1.安装pip
+* 2.安装Microsoft C++ 生成工具 https://visualstudio.microsoft.com/zh-hans/visual-cpp-build-tools/
+
+2. 安装MongoDB数据库：https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-8.0.12-signed.msi
+
+
+3. 启动应用：
+   ```bash
+   python app.py
+   ```
+
+4. 访问应用：
+   打开浏览器访问 `http://localhost:5000`
+
 ## API接口
 
 ### 认证相关
@@ -118,62 +180,18 @@ project/
 - `GET /api/topics` - 获取所有可用学习主题
 - `GET /api/recommendations` - 获取学习主题推荐
 
-## 环境配置
-
-1. 复制 [.env.example](file:///C:/Users/lenovo/Desktop/project/.env.example) 文件为 `.env` 并填写实际值：
-   ```bash
-   cp .env.example .env
-   ```
-
-2. 配置必要的环境变量：
-   - `DASHSCOPE_API_KEY`: 阿里云百炼API密钥
-   - `MONGO_URI`: MongoDB连接字符串
-   - `JWT_SECRET_KEY`: JWT密钥
-   - `REDIS_URL`: Redis连接字符串
-
-## 安装与运行
-
-### 本地开发环境
-
-1. 安装依赖：
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. 启动应用：
-   ```bash
-   python app.py
-   ```
-
-3. 访问应用：
-   打开浏览器访问 `http://localhost:5000`
-
-### 生产环境部署
-
-1. 设置环境变量：
-   - `FLASK_ENV=production`
-   - `SECRET_KEY` 设置为强随机字符串
-   - 配置数据库和Redis连接
-
-2. 使用Gunicorn或uWSGI等WSGI服务器运行：
-   ```bash
-   gunicorn -w 4 -b 0.0.0.0:8000 app:app
-   ```
-
-3. 建议使用Nginx作为反向代理服务器
 
 
 ## 可执行成果
 
-目前项目为Web应用，可通过本地运行或部署到服务器访问。未来将提供以下可执行成果：
+目前项目为Web应用，可通过本地运行或部署到服务器访问。
 
-1. **Web应用** - 可通过浏览器访问的学习平台
-2. **Docker镜像** - 简化部署流程的容器化应用
-3. **桌面客户端** - 独立的桌面应用程序（计划中）
+ **Web应用** - 可通过浏览器访问的学习平台`http://103.40.14.38:40000`
+
 
 访问方式：
 - 本地运行：启动应用后访问 `http://localhost:5000`
-- 在线部署：部署到服务器后通过域名访问
+- 在线部署：部署到服务器后通过域名访问 `http://103.40.14.38:40000`
 
 ## 开发路线图
 
